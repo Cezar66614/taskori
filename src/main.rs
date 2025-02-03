@@ -1,7 +1,21 @@
-pub mod color;
-use color::*;
+pub mod font;
+use font::*;
+
+pub mod symbol;
+
+pub mod container;
+use container::*;
 
 fn main() {
+    let container_single = Container::new(Size { width: 3, height: 1 }, ContainerStyle::Single);
+    let container_double = Container::new(Size { width: 6, height: 2 }, ContainerStyle::Double);
+    let container_heavy = Container::new(Size { width: 9, height: 3 }, ContainerStyle::Heavy);
+
+    println!("{}", container_single.as_str());
+    println!("{}", container_double.as_str());
+    println!("{}", container_heavy.as_str());
+
+    /* Font test
     let colors = [
         Color::Black,
         Color::Red,
@@ -41,5 +55,5 @@ fn main() {
         }
         println!();
     }
-
+    */
 }
