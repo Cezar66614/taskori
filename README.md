@@ -1,4 +1,4 @@
-#taskori
+# taskori
 
 A CLI tasks management app build in Rust.
 
