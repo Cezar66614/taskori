@@ -27,7 +27,7 @@ pub struct Reset;
 impl Reset {
     const RESET_CODE: &'static str = "\u{001b}[0m";
 
-    const fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         Self::RESET_CODE
     }
 }
@@ -101,7 +101,7 @@ impl Font {
         out
     }
 
-    fn as_str(&self) -> (&'static str, &'static str, [Option<&'static str>;3]) {
+    pub const fn as_str(&self) -> (&'static str, &'static str, [Option<&'static str>;3]) {
         /*
         let background = match self.background_color {
             Color::Black   => Self::lookup(0, ColorType::Background),
@@ -131,6 +131,23 @@ impl Font {
         let text = Self::lookup(self.text_color as usize, ColorType::Text);
 
         (background, text, Self::lookup_decoration(&self.decorations))
+    }
+
+    pub fn as_string(&self) -> String {
+        let mut out = String::new();
+
+        let font = self.as_str();
+
+        out += font.0;
+        out += font.1;
+
+        for i in 0..3 {
+            if let Some(decoration) = font.2[i] {
+                out += decoration;
+            }
+        }
+
+        out
     }
 
     pub fn decoration_set(&mut self, decoration: ColorDecoration) {

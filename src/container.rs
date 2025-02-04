@@ -1,6 +1,5 @@
+use crate::definitions::*;
 use crate::symbol::*;
-
-pub struct Size { pub width: u32, pub height: u32 }
 
 pub enum ContainerStyle {
     Single,
