@@ -1,6 +1,6 @@
 use crate::definitions::Position;
-use crate::canvas::*;
-use crate::font::*;
+use crate::canvas::{Canvas, DEFAULT_FONT};
+use crate::font::{Font, Reset};
 
 use std::io::{self, Write};
 
@@ -26,25 +26,23 @@ impl Screen {
     }
 
     pub fn print(&self) {
+        let mut font_last = DEFAULT_FONT;
+
         Self::screen_clear();
+
+        print!("{}", font_last);
+
         for position_y in 0..self.size.height {
             for position_x in 0..self.size.width {
-                if let Some(font) = self.data[position_y][position_x].font {
-                    print!("{}", match font {
-                        FontTypes::Font(font) => font.as_string(),
-                        _ => String::new(),
-                    })
+                if self.data[position_y][position_x].font.as_str() != font_last.as_str() {
+                    font_last = self.data[position_y][position_x].font;
+                    print!("{}", font_last);
                 }
                 print!("{}", self.data[position_y][position_x].data);
-                if let Some(font) = self.data[position_y][position_x].font {
-                    print!("{}", match font {
-                        FontTypes::Reset => Reset.as_str(),
-                        _ => "",
-                    })
-                }
             }
             if position_y + 1 < self.size.height { println!(""); }
         }
+        print!("{}", Reset);
         Self::screen_flush();
     }
 }

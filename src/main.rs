@@ -27,6 +27,52 @@ fn main() {
 
     let mut page_main_canvas = Canvas::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT});
 
+    let page_main_container = Container::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT}, ContainerStyle::Double).as_str();
+    page_main_canvas.add_string(&RichString::new(&page_main_container, DEFAULT_FONT), Position{x: 0, y: 0});
+
+    let mut page_main_title_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Magenta); page_main_title_font.decoration_set(ColorDecoration::Bold);
+    let page_main_title = "Taskori";
+    page_main_canvas.add_string(&RichString::new(&page_main_title, page_main_title_font), Position{x: SCREEN_WIDTH / 2 - page_main_title.len() / 2, y: 1});
+
+
+    let mut page_main_today_canvas = Canvas::new(Size{width: 7, height: 10});
+
+    let page_main_today_container = Container::new(Size{width: 7, height: 10}, ContainerStyle::Single).as_str();
+    page_main_today_canvas.add_string(&RichString::new(&page_main_today_container, Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow)), Position{x: 0, y: 0});
+
+    page_main_today_canvas.add_string(&RichString::new("Today", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow)), Position{x: 1, y: 1});
+
+
+    let mut page_main_tomorrow_canvas = Canvas::new(Size{width: 10, height: 10});
+
+    let page_main_tomorrow_container = Container::new(Size{width: 10, height: 10}, ContainerStyle::Single).as_str();
+    page_main_tomorrow_canvas.add_string(&RichString::new(&page_main_tomorrow_container, Font::new(DEFAULT_COLOR_BACKGROUND, Color::Green)), Position{x: 0, y: 0});
+
+    page_main_tomorrow_canvas.add_string(&RichString::new("Tomorrow", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Green)), Position{x: 1, y: 1});
+
+
+    let mut page_main_week_canvas = Canvas::new(Size{width: 6, height: 5});
+
+    let page_main_week_container = Container::new(Size{width: 6, height: 5}, ContainerStyle::Single).as_str();
+    page_main_week_canvas.add_string(&RichString::new(&page_main_week_container, Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red)), Position{x: 0, y: 0});
+
+    page_main_week_canvas.add_string(&RichString::new("Week", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red)), Position{x: 1, y: 1});
+
+
+    screen.add_canvas(&page_main_canvas, Position{x: 0, y: 0});
+    screen.add_canvas(&page_main_today_canvas, Position{x: 2, y: 3});
+    screen.add_canvas(&page_main_tomorrow_canvas, Position{x: 9, y: 3});
+    screen.add_canvas(&page_main_week_canvas, Position{x: 56, y: 5});
+
+    screen.print();
+
+
+    /* Canvas Old
+    let mut screen = Screen::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT});
+
+
+    let mut page_main_canvas = Canvas::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT});
+
 
     let page_main_container = Container::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT}, ContainerStyle::Double).as_str();
     page_main_canvas.add_string(&page_main_container, Position{x: 0, y: 0});
@@ -70,6 +116,7 @@ fn main() {
 
 
     screen.print();
+    */
 
     /* Canvas / Screen Test
     let mut screen = Screen::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT});

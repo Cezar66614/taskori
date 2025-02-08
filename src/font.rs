@@ -40,7 +40,7 @@ pub struct Font {
 }
 
 impl Font {
-    pub fn new(background_color: Color, text_color: Color) -> Self {
+    pub const fn new(background_color: Color, text_color: Color) -> Self {
         Self {
             background_color,
             text_color,
@@ -150,31 +150,25 @@ impl Font {
         out
     }
 
-    pub fn decoration_set(&mut self, decoration: ColorDecoration) {
+    pub const fn decoration_set(&mut self, decoration: ColorDecoration) {
         match decoration {
             ColorDecoration::Bold      => self.decorations[0] = Some(ColorDecoration::Bold),
             ColorDecoration::Underline => self.decorations[1] = Some(ColorDecoration::Underline),
             ColorDecoration::Reversed  => self.decorations[2] = Some(ColorDecoration::Reversed),
         }
     }
-    pub fn decoration_unset(&mut self, decoration: ColorDecoration) {
+    pub const fn decoration_unset(&mut self, decoration: ColorDecoration) {
         match decoration {
             ColorDecoration::Bold      => self.decorations[0] = None,
             ColorDecoration::Underline => self.decorations[1] = None,
             ColorDecoration::Reversed  => self.decorations[2] = None,
         }
     }
-    pub fn decoration_reset(&mut self) { self.decorations = [None;3]; }
+    pub const fn decoration_reset(&mut self) { self.decorations = [None;3]; }
 
-    pub fn color_set_background(&mut self, color: Color) { self.background_color = color; }
-    pub fn color_set_text(&mut self, color: Color) { self.text_color = color; }
+    pub const fn color_set_background(&mut self, color: Color) { self.background_color = color; }
+    pub const fn color_set_text(&mut self, color: Color) { self.text_color = color; }
 
-}
-
-#[derive(Copy, Clone)]
-pub enum FontTypes {
-    Font(Font),
-    Reset,
 }
 
 use std::fmt;
