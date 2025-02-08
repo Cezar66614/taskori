@@ -1,6 +1,6 @@
 use crate::definitions::Position;
 use crate::canvas::{Canvas, DEFAULT_FONT};
-use crate::font::{Font, Reset};
+use crate::font::Reset;
 
 use std::io::{self, Write};
 
