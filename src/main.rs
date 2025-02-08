@@ -37,32 +37,36 @@ fn main() {
 
     let mut page_main_today_canvas = Canvas::new(Size{width: 29, height: 13});
 
-    let mut page_main_today_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow); page_main_today_font.decoration_set(ColorDecoration::Bold);
+    let page_main_today_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow);
+    let mut page_main_today_title_font = page_main_today_font; page_main_today_title_font.decoration_set(ColorDecoration::Bold);
 
     let page_main_today_container = Container::new(Size{width: 29, height: 13}, ContainerStyle::Single).as_str();
     page_main_today_canvas.add_string(&RichString::new(&page_main_today_container, page_main_today_font), Position{x: 0, y: 0});
 
-    page_main_today_canvas.add_string(&RichString::new("Today", page_main_today_font), Position{x: 1, y: 0});
+    page_main_today_canvas.add_string(&RichString::new("Today", page_main_today_title_font), Position{x: 1, y: 0});
 
 
     let mut page_main_future_canvas = Canvas::new(Size{width: 30, height: 8});
 
-    let mut page_main_future_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Blue); page_main_future_font.decoration_set(ColorDecoration::Bold);
+    let page_main_future_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Blue);
+    let mut page_main_future_title_font = page_main_future_font; page_main_future_title_font.decoration_set(ColorDecoration::Bold);
 
     let page_main_future_container = Container::new(Size{width: 30, height: 8}, ContainerStyle::Single).as_str();
     page_main_future_canvas.add_string(&RichString::new(&page_main_future_container, page_main_future_font), Position{x: 0, y: 0});
 
-    page_main_future_canvas.add_string(&RichString::new("Future", page_main_future_font), Position{x: 1, y: 0});
+    page_main_future_canvas.add_string(&RichString::new("Future", page_main_future_title_font), Position{x: 1, y: 0});
 
 
     let mut page_main_week_canvas = Canvas::new(Size{width: 30, height: 5});
 
-    let mut page_main_week_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red); page_main_week_font.decoration_set(ColorDecoration::Bold);
+    let page_main_week_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red);
+    let mut page_main_week_title_font = page_main_week_font; page_main_week_title_font.decoration_set(ColorDecoration::Bold);
 
     let page_main_week_container = Container::new(Size{width: 30, height: 5}, ContainerStyle::Single).as_str();
     page_main_week_canvas.add_string(&RichString::new(&page_main_week_container, page_main_week_font), Position{x: 0, y: 0});
 
-    page_main_week_canvas.add_string(&RichString::new("Week", page_main_week_font), Position{x: 1, y: 0});
+    page_main_week_canvas.add_string(&RichString::new("Week", page_main_week_title_font), Position{x: 1, y: 0});
+
 
     let page_main_week_day_container = Container::new(Size{width: 4, height: 3}, ContainerStyle::Single).as_str();
 
@@ -71,7 +75,7 @@ fn main() {
     page_main_week_canvas.add_string(&RichString::new("February", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Green)), Position{x: 21, y: 0});
 
     let week_days = ["M", "T", "W", "T", "F", "S", "S"];
-    let week_day_current = 2;
+    let week_day_current = 6;
 
     for i in 0..7 {
         let font: Font;
