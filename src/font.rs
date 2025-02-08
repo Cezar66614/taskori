@@ -32,6 +32,24 @@ impl Reset {
     }
 }
 
+pub struct ResetDecoration;
+
+impl ResetDecoration {
+    const RESET_DECORATION_BOLD_CODE: &'static str = "\u{001b}[22m";
+    const RESET_DECORATION_UNDERLINE_CODE: &'static str = "\u{001b}[24m";
+    const RESET_DECORATION_REVERSED_CODE: &'static str = "\u{001b}[27m";
+
+    pub const fn bold_as_str(&self) -> &'static str {
+        Self::RESET_DECORATION_BOLD_CODE
+    }
+    pub const fn underline_as_str(&self) -> &'static str {
+        Self::RESET_DECORATION_UNDERLINE_CODE
+    }
+    pub const fn reversed_as_str(&self) -> &'static str {
+        Self::RESET_DECORATION_REVERSED_CODE
+    }
+}
+
 #[derive(Copy, Clone)]
 pub struct Font {
     background_color: Color,
@@ -165,6 +183,8 @@ impl Font {
         }
     }
     pub const fn decoration_reset(&mut self) { self.decorations = [None;3]; }
+
+    pub const fn get_decoration(&self) -> [Option<ColorDecoration>;3] { self.decorations }
 
     pub const fn color_set_background(&mut self, color: Color) { self.background_color = color; }
     pub const fn color_set_text(&mut self, color: Color) { self.text_color = color; }

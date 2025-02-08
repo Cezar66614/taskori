@@ -1,6 +1,6 @@
 use crate::definitions::Position;
 use crate::canvas::{Canvas, DEFAULT_FONT};
-use crate::font::Reset;
+use crate::font::{ColorDecoration, Reset, ResetDecoration};
 
 use std::io::{self, Write};
 
@@ -35,6 +35,16 @@ impl Screen {
         for position_y in 0..self.size.height {
             for position_x in 0..self.size.width {
                 if self.data[position_y][position_x].font.as_str() != font_last.as_str() {
+                    for i in 0..3 {
+                        if let Some(decoration) = font_last.get_decoration()[i] {
+                            match decoration {
+                                ColorDecoration::Bold => print!("{}", ResetDecoration.bold_as_str()),
+                                ColorDecoration::Underline => print!("{}", ResetDecoration.underline_as_str()),
+                                ColorDecoration::Reversed => print!("{}", ResetDecoration.reversed_as_str()),
+                            }
+                        }
+                    }
+
                     font_last = self.data[position_y][position_x].font;
                     print!("{}", font_last);
                 }
