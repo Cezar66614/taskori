@@ -1,12 +1,14 @@
 use crate::definitions::*;
 use crate::symbol::*;
 
+#[derive(Copy, Clone)]
 pub enum ContainerStyle {
     Single,
     Double,
     Heavy,
 }
 
+#[derive(Copy, Clone)]
 pub struct Container {
     size: Size,
     style: ContainerStyle,
@@ -14,6 +16,8 @@ pub struct Container {
 
 impl Container {
     pub fn new(size: Size, style: ContainerStyle) -> Self {
+        if size.width < 2 && size.height < 2 { panic!("Incorrect use of Container"); }
+
         Self {
             size,
             style,
@@ -28,7 +32,7 @@ impl Container {
                 // Top
                 r#box += Symbol::BoxTopLeft.as_str();
 
-                for _i in 1..=self.size.width {
+                for _i in 2..self.size.width {
                     r#box += Symbol::BoxHorizontal.as_str();
                 }
 
@@ -37,10 +41,10 @@ impl Container {
                 r#box += "\n";
 
                 // Middle
-                for _j in 1..=self.size.height {
+                for _j in 2..self.size.height {
                     r#box += Symbol::BoxVertical.as_str();
 
-                    for _i in 1..=self.size.width {
+                    for _i in 2..self.size.width {
                         r#box += " ";
                     }
 
@@ -52,7 +56,7 @@ impl Container {
                 // Bottom
                 r#box += Symbol::BoxBottomLeft.as_str();
 
-                for _i in 1..=self.size.width {
+                for _i in 2..self.size.width {
                     r#box += Symbol::BoxHorizontal.as_str();
                 }
 
@@ -62,7 +66,7 @@ impl Container {
                 // Top
                 r#box += Symbol::BoxDoubleTopLeft.as_str();
 
-                for _i in 1..=self.size.width {
+                for _i in 2..self.size.width {
                     r#box += Symbol::BoxDoubleHorizontal.as_str();
                 }
 
@@ -71,10 +75,10 @@ impl Container {
                 r#box += "\n";
 
                 // Middle
-                for _j in 1..=self.size.height {
+                for _j in 2..self.size.height {
                     r#box += Symbol::BoxDoubleVertical.as_str();
 
-                    for _i in 1..=self.size.width {
+                    for _i in 2..self.size.width {
                         r#box += " ";
                     }
 
@@ -86,7 +90,7 @@ impl Container {
                 // Bottom
                 r#box += Symbol::BoxDoubleBottomLeft.as_str();
 
-                for _i in 1..=self.size.width {
+                for _i in 2..self.size.width {
                     r#box += Symbol::BoxDoubleHorizontal.as_str();
                 }
 
@@ -96,7 +100,7 @@ impl Container {
                 // Top
                 r#box += Symbol::BoxHeavyFull.as_str();
 
-                for _i in 1..=self.size.width {
+                for _i in 2..self.size.width {
                     r#box += Symbol::BoxHeavyUp.as_str();
                 }
 
@@ -105,10 +109,10 @@ impl Container {
                 r#box += "\n";
 
                 // Middle
-                for _j in 1..=self.size.height {
+                for _j in 2..self.size.height {
                     r#box += Symbol::BoxHeavyFull.as_str();
 
-                    for _i in 1..=self.size.width {
+                    for _i in 2..self.size.width {
                         r#box += " ";
                     }
 
@@ -120,7 +124,7 @@ impl Container {
                 // Bottom
                 r#box += Symbol::BoxHeavyFull.as_str();
 
-                for _i in 1..=self.size.width {
+                for _i in 2..self.size.width {
                     r#box += Symbol::BoxHeavyDown.as_str();
                 }
 

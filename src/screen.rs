@@ -31,11 +31,17 @@ impl Screen {
             for position_x in 0..self.size.width {
                 if let Some(font) = self.data[position_y][position_x].font {
                     print!("{}", match font {
-                        Rich::Font(font) => font.as_string(),
-                        Rich::Reset => String::from(Reset.as_str()),
+                        FontTypes::Font(font) => font.as_string(),
+                        _ => String::new(),
                     })
                 }
                 print!("{}", self.data[position_y][position_x].data);
+                if let Some(font) = self.data[position_y][position_x].font {
+                    print!("{}", match font {
+                        FontTypes::Reset => Reset.as_str(),
+                        _ => "",
+                    })
+                }
             }
             if position_y + 1 < self.size.height { println!(""); }
         }

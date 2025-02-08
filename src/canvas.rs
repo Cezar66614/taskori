@@ -1,78 +1,108 @@
 use crate::definitions::{Size, Position};
-use crate::font::Font;
+use crate::font::{FontTypes, Reset};
 use crate::rich_string::RichString;
 
-
 #[derive(Copy, Clone)]
-pub enum Rich {
-    Font(Font),
-    Reset,
-}
-
-#[derive(Copy, Clone)]
-pub struct RichChar {
+pub struct CanvasChar {
     pub data: char,
-    pub font: Option<Rich>,
+    pub font: Option<FontTypes>,
 }
 
 pub struct Canvas {
     pub size: Size,
-    pub data: Vec<Vec<RichChar>>,
+    pub data: Vec<Vec<CanvasChar>>,
 }
 
 impl Canvas {
     pub fn new(size: Size) -> Self {
         Self {
             size,
-            data: vec![vec![RichChar{data: '\0', font: None}; size.width]; size.height],
+            data: vec![vec![CanvasChar{data: ' ', font: None}; size.width]; size.height],
         }
     }
 
     pub fn clear(&mut self) {
-        self.data.fill(vec![RichChar{data: '\0', font: None}; self.size.width]);
+        self.data.fill(vec![CanvasChar{data: '\0', font: None}; self.size.width]);
     }
 
     pub fn add_string(&mut self, string: &str, position: Position) {
-        let mut position_x: usize = position.x;
-        let mut position_y: usize = position.y;
+        let mut array_position = position;
 
         for character in string.chars() {
             if character == '\n' {
-                position_x = position.x;
-                position_y += 1;
+                array_position.y += 1;
+                array_position.x = position.x;
             } else {
-                self.data[position_y][position_x].data = character;
-                position_x += 1;
+                self.data[array_position.y][array_position.x].data = character;
+                array_position.x += 1;
             }
         }
     }
 
     pub fn add_rich_string(&mut self, string: &RichString, position: Position) {
-        let mut position_x: usize = position.x;
-        let mut position_y: usize = position.y;
+        let mut array_position = position;
+        let mut last_position = array_position;
 
-        let mut new_line: bool = true;
+        let mut active = false;
 
         for character in string.get_text().chars() {
-            if new_line {
-                self.data[position_y][position_x].font = Some(Rich::Font(string.get_font()));
-            }
-
             if character == '\n' {
-                self.data[position_y][position_x].font = Some(Rich::Reset);
+                if active {
+                    self.data[last_position.y][last_position.x].font = Some(FontTypes::Reset);
+                    active = false;
+                }
 
-                new_line = true;
-
-                position_x = position.x;
-                position_y += 1;
+                array_position.y += 1;
+                array_position.x = position.x;
             } else {
-                new_line = false;
+                if !active {
+                    self.data[array_position.y][array_position.x].font = Some(FontTypes::Font(string.get_font()));
+                    active = true;
+                }
 
-                self.data[position_y][position_x].data = character;
-                position_x += 1;
+                self.data[array_position.y][array_position.x].data = character;
+
+                last_position = array_position;
+                array_position.x += 1;
             }
         }
 
-        self.data[position_y][position_x].font = Some(Rich::Reset);
+        if active {
+            self.data[last_position.y][last_position.x].font = Some(FontTypes::Reset);
+        }
+    }
+
+    pub fn as_str(&self) -> String {
+        let mut out = String::new();
+        let mut position = Position{x: 0, y: 0};
+
+        for _y in self.data.iter() {
+            for _x in _y.iter() {
+                if let Some(font) = self.data[position.y][position.x].font {
+                    let data: String;
+                    data = match font {
+                        FontTypes::Font(font) => font.as_string(),
+                        _ => String::new(),
+                    };
+                    out += &data;
+                }
+                out += &self.data[position.y][position.x].data.to_string();
+                if let Some(font) = self.data[position.y][position.x].font {
+                    out += match font {
+                        FontTypes::Reset => Reset.as_str(),
+                        _ => "",
+                    }
+                }
+
+                position.x += 1;
+            }
+
+            if position.y + 1 < self.size.height { out += "\n"; }
+
+            position.y += 1;
+            position.x = 0;
+        }
+
+        out
     }
 }

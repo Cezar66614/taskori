@@ -171,6 +171,12 @@ impl Font {
 
 }
 
+#[derive(Copy, Clone)]
+pub enum FontTypes {
+    Font(Font),
+    Reset,
+}
+
 use std::fmt;
 
 impl fmt::Display for Reset {

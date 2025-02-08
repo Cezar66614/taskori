@@ -1,5 +1,6 @@
 use crate::font::*;
 
+#[derive(Clone)]
 pub struct RichString {
     text: String,
     font: Font,
