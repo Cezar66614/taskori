@@ -22,7 +22,7 @@ impl Canvas {
     }
 
     pub fn clear(&mut self) {
-        self.data.fill(vec![CanvasChar{data: '\0', font: None}; self.size.width]);
+        self.data.fill(vec![CanvasChar{data: ' ', font: None}; self.size.width]);
     }
 
     pub fn add_string(&mut self, string: &str, position: Position) {
