@@ -35,34 +35,62 @@ fn main() {
     page_main_canvas.add_string(&RichString::new(&page_main_title, page_main_title_font), Position{x: SCREEN_WIDTH / 2 - page_main_title.len() / 2, y: 1});
 
 
-    let mut page_main_today_canvas = Canvas::new(Size{width: 7, height: 10});
+    let mut page_main_today_canvas = Canvas::new(Size{width: 29, height: 13});
 
-    let page_main_today_container = Container::new(Size{width: 7, height: 10}, ContainerStyle::Single).as_str();
-    page_main_today_canvas.add_string(&RichString::new(&page_main_today_container, Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow)), Position{x: 0, y: 0});
+    let page_main_today_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow);
 
-    page_main_today_canvas.add_string(&RichString::new("Today", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Yellow)), Position{x: 1, y: 1});
+    let page_main_today_container = Container::new(Size{width: 29, height: 13}, ContainerStyle::Single).as_str();
+    page_main_today_canvas.add_string(&RichString::new(&page_main_today_container, page_main_today_font), Position{x: 0, y: 0});
 
-
-    let mut page_main_tomorrow_canvas = Canvas::new(Size{width: 10, height: 10});
-
-    let page_main_tomorrow_container = Container::new(Size{width: 10, height: 10}, ContainerStyle::Single).as_str();
-    page_main_tomorrow_canvas.add_string(&RichString::new(&page_main_tomorrow_container, Font::new(DEFAULT_COLOR_BACKGROUND, Color::Green)), Position{x: 0, y: 0});
-
-    page_main_tomorrow_canvas.add_string(&RichString::new("Tomorrow", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Green)), Position{x: 1, y: 1});
+    page_main_today_canvas.add_string(&RichString::new("Today", page_main_today_font), Position{x: 2, y: 1});
 
 
-    let mut page_main_week_canvas = Canvas::new(Size{width: 6, height: 5});
+    let mut page_main_future_canvas = Canvas::new(Size{width: 30, height: 7});
 
-    let page_main_week_container = Container::new(Size{width: 6, height: 5}, ContainerStyle::Single).as_str();
-    page_main_week_canvas.add_string(&RichString::new(&page_main_week_container, Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red)), Position{x: 0, y: 0});
+    let page_main_future_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Blue);
 
-    page_main_week_canvas.add_string(&RichString::new("Week", Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red)), Position{x: 1, y: 1});
+    let page_main_future_container = Container::new(Size{width: 30, height: 7}, ContainerStyle::Single).as_str();
+    page_main_future_canvas.add_string(&RichString::new(&page_main_future_container, page_main_future_font), Position{x: 0, y: 0});
+
+    page_main_future_canvas.add_string(&RichString::new("Future", page_main_future_font), Position{x: 2, y: 1});
+
+
+    let mut page_main_week_canvas = Canvas::new(Size{width: 30, height: 6});
+
+    let page_main_week_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Red);
+
+    let page_main_week_container = Container::new(Size{width: 30, height: 6}, ContainerStyle::Single).as_str();
+    page_main_week_canvas.add_string(&RichString::new(&page_main_week_container, page_main_week_font), Position{x: 0, y: 0});
+
+    page_main_week_canvas.add_string(&RichString::new("Week", page_main_week_font), Position{x: 2, y: 1});
+
+    let page_main_week_day_container = Container::new(Size{width: 4, height: 3}, ContainerStyle::Single).as_str();
+
+    let page_main_week_day_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Cyan);
+
+    page_main_week_canvas.add_string(&RichString::new("February", page_main_week_font), Position{x: 20, y: 1});
+
+    let week_days = ["M", "T", "W", "T", "F", "S", "S"];
+    let week_day_current = 5;
+
+    for i in 0..7 {
+        let font: Font;
+        if i != week_day_current {
+            font = page_main_week_font;
+        } else {
+            font = page_main_week_day_font;
+        }
+
+        page_main_week_canvas.add_string(&RichString::new(&page_main_week_day_container, font), Position{x: 1 + 4 * i, y: 2});
+        page_main_week_canvas.add_string(&RichString::new(week_days[i], font), Position{x: 2 + 4 * i, y: 2});
+        page_main_week_canvas.add_string(&RichString::new(&format!("0{}", i + 1), font), Position{x: 2 + 4 * i, y: 3});
+    }
 
 
     screen.add_canvas(&page_main_canvas, Position{x: 0, y: 0});
-    screen.add_canvas(&page_main_today_canvas, Position{x: 2, y: 3});
-    screen.add_canvas(&page_main_tomorrow_canvas, Position{x: 9, y: 3});
-    screen.add_canvas(&page_main_week_canvas, Position{x: 56, y: 5});
+    screen.add_canvas(&page_main_today_canvas, Position{x: 2, y: 2});
+    screen.add_canvas(&page_main_future_canvas, Position{x: 32, y: 2});
+    screen.add_canvas(&page_main_week_canvas, Position{x: 32, y: 9});
 
     screen.print();
 
