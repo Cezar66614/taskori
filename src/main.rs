@@ -20,11 +20,72 @@ use screen::*;
 
 use chrono::{DateTime, Local, Days};
 
+use std::env;
+
 const SCREEN_WIDTH: usize = 64;
 const SCREEN_HEIGHT: usize = 16;
 const APP_TITLE: &'static str = "Taskori";
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() > 1 {
+        enum Methods {
+            Add,
+        }
+        let mut method: Option<Methods> = None;
+
+        enum Modes {
+            Name,
+            Date,
+            TimeStart,
+            TimeEnd,
+        }
+        let mut mode: Option<Modes> = None;
+
+        let mut name: Option<String> = None;
+        let mut date: Option<String> = None;
+
+        let mut time_start: Option<String> = None;
+        let mut time_end: Option<String> = None;
+
+        for arg in args.iter().skip(1) {
+            if let Some(mode) = &mode {
+                match mode {
+                    Modes::Name => { name = Some(arg.clone()); }
+                    Modes::Date => { date = Some(arg.clone()); }
+                    Modes::TimeStart => { time_start = Some(arg.clone()); }
+                    Modes::TimeEnd => { time_end = Some(arg.clone()); }
+                }
+            }
+            mode = None;
+
+            match arg.as_str() {
+                "add" => { method = Some(Methods::Add); }
+
+                "-n" | "--name" => { mode = Some(Modes::Name); }
+
+                "-d" | "--date" => { mode = Some(Modes::Date); }
+
+                "-s" | "--time-start" => { mode = Some(Modes::TimeStart); }
+                "-e" | "--time-end" => { mode = Some(Modes::TimeEnd); }
+
+                _ => ()
+            }
+
+            //println!("{}", arg);
+        }
+
+        if method.is_none() { todo!("Implement method not set error message"); }
+        if name.is_none() { todo!("Implement name not set error message"); }
+        if date.is_none() { todo!("Implement date not set error message - it should default to today maybe?"); }
+        if time_start.is_none() { todo!("Implement time_start not set error message"); }
+        if time_end.is_none() { todo!("Implement time_end not set error message"); }
+
+        println!("{}\n{}\n{}\n{}", name.unwrap(), date.unwrap(), time_start.unwrap(), time_end.unwrap());
+
+        return;
+    }
+
     let mut screen = Screen::new(Size{width: SCREEN_WIDTH, height: SCREEN_HEIGHT});
 
 
