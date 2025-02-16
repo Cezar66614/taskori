@@ -20,14 +20,35 @@ use screen::*;
 
 use chrono::{DateTime, Days, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone};
 
+use std::{fs::OpenOptions, io::Read};
+use std::io::Write;
+
+use serde_derive::{Serialize, Deserialize};
+
 use std::env;
 
 const SCREEN_WIDTH: usize = 64;
 const SCREEN_HEIGHT: usize = 16;
 const APP_TITLE: &'static str = "Taskori";
 
+#[derive(Serialize, Deserialize, Debug)]
+struct Event {
+    name: String,
+    start: String,
+    end: String,
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct Events {
+    events: Vec<Event>,
+}
+
 fn main() {
     let time_date: DateTime<Local> = chrono::offset::Local::now();
+
+    let mut events_file_read = OpenOptions::new().read(true).open("events.json").unwrap();
+    let mut events_content = String::new();
+    events_file_read.read_to_string(&mut events_content).unwrap();
+    let mut events: Events = serde_json::from_str(&events_content).unwrap();
 
     let args: Vec<String> = env::args().collect();
     if args.len() > 1 {
@@ -103,9 +124,11 @@ fn main() {
         let event_start: DateTime<Local> = Local.from_local_datetime(&date_time_start).unwrap();
         let event_end: DateTime<Local> = Local.from_local_datetime(&date_time_end).unwrap();
 
-        println!("{:?}", &event_name);
-        println!("{:?}", &event_start);
-        println!("{:?}", &event_end);
+
+        events.events.push(Event{name: event_name, start: format!("{:?}", event_start), end: format!("{:?}", event_end)});
+
+        let mut events_file_write = OpenOptions::new().write(true).truncate(true).open("events.json").unwrap();
+        events_file_write.write_all(serde_json::to_string(&events).unwrap().as_bytes()).unwrap();
 
         return;
     }
