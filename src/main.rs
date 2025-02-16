@@ -18,7 +18,7 @@ use canvas::*;
 pub mod screen;
 use screen::*;
 
-use chrono::{DateTime, Local, Days};
+use chrono::{DateTime, Days, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone};
 
 use std::env;
 
@@ -27,6 +27,8 @@ const SCREEN_HEIGHT: usize = 16;
 const APP_TITLE: &'static str = "Taskori";
 
 fn main() {
+    let time_date: DateTime<Local> = chrono::offset::Local::now();
+
     let args: Vec<String> = env::args().collect();
     if args.len() > 1 {
         enum Methods {
@@ -43,10 +45,10 @@ fn main() {
         let mut mode: Option<Modes> = None;
 
         let mut name: Option<String> = None;
-        let mut date: Option<String> = None;
+        let mut date: Option<String> = None; let date_parsed: NaiveDate;
 
-        let mut time_start: Option<String> = None;
-        let mut time_end: Option<String> = None;
+        let mut time_start: Option<String> = None; let time_start_parsed: NaiveTime;
+        let mut time_end: Option<String> = None; let time_end_parsed: NaiveTime;
 
         for arg in args.iter().skip(1) {
             if let Some(mode) = &mode {
@@ -71,17 +73,39 @@ fn main() {
 
                 _ => ()
             }
-
-            //println!("{}", arg);
         }
 
-        if method.is_none() { todo!("Implement method not set error message"); }
-        if name.is_none() { todo!("Implement name not set error message"); }
-        if date.is_none() { todo!("Implement date not set error message - it should default to today maybe?"); }
-        if time_start.is_none() { todo!("Implement time_start not set error message"); }
-        if time_end.is_none() { todo!("Implement time_end not set error message"); }
+        if method.is_none() { eprintln!("Method required!"); return; }
 
-        println!("{}\n{}\n{}\n{}", name.unwrap(), date.unwrap(), time_start.unwrap(), time_end.unwrap());
+        let name = if let Some(name) = name { name } else { eprintln!("Name required!"); return; };
+
+        if date.is_none() {
+            date_parsed = NaiveDate::parse_from_str(format!("{}", time_date.format("%d.%m.%Y")).as_str(), "%d.%m.%Y").unwrap();
+        } else {
+            date_parsed = NaiveDate::parse_from_str(&date.unwrap(), "%d.%m.%Y").unwrap();
+        }
+
+        if time_start.is_none() { eprintln!("Start Time required!"); return; }
+        else {
+            time_start_parsed = NaiveTime::parse_from_str(&time_start.unwrap(), "%H:%M").unwrap();
+        }
+
+        if time_end.is_none() {
+            time_end_parsed = NaiveTime::parse_from_str("23:59:59", "%H:%M:%S").unwrap();
+        } else {
+            time_end_parsed = NaiveTime::parse_from_str(&time_end.unwrap(), "%H:%M").unwrap();
+        }
+
+        let date_time_start: NaiveDateTime = date_parsed.and_time(time_start_parsed);
+        let date_time_end: NaiveDateTime = date_parsed.and_time(time_end_parsed);
+
+        let event_name: String = name;
+        let event_start: DateTime<Local> = Local.from_local_datetime(&date_time_start).unwrap();
+        let event_end: DateTime<Local> = Local.from_local_datetime(&date_time_end).unwrap();
+
+        println!("{:?}", &event_name);
+        println!("{:?}", &event_start);
+        println!("{:?}", &event_end);
 
         return;
     }
@@ -135,8 +159,6 @@ fn main() {
     let page_main_week_day_container = Container::new(Size{width: 4, height: 3}, ContainerStyle::Single).as_str();
 
     let page_main_week_day_font = Font::new(DEFAULT_COLOR_BACKGROUND, Color::Cyan);
-
-    let time_date: DateTime<Local> = chrono::offset::Local::now();
 
     let date_month = format!("{}", time_date.format("%B"));
 
